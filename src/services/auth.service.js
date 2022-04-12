@@ -46,13 +46,13 @@ const AppError = require("./../utils/appError");
     }
 
     //2 check if user exists and password is correct
-    const user = await User.findOne({ email: email }).select("+password");
-    if (!user || !(await user.correctPassword(password, user.password))) {
+    const loggedUser = await User.findOne({ email: email }).select("+password");
+    if (!loggedUser || !(await user.correctPassword(password, loggedUser.password))) {
       return next(new AppError("Incorrect email or password", 401));
     }
 
     // 3 Send token
-    return createSendToken(user);
+    return createSendToken(loggedUser);
   };
 
 
