@@ -24,8 +24,8 @@ const AppError = require("./../utils/appError");
   }
 
   exports.signUp = async (data, next) => {
-    let user = await User.findOne({ email: data.email });
-    if (user) next(new AppError("Email already exists", 400));
+    let oldUser = await User.findOne({ email: data.email });
+    if (oldUser) next(new AppError("Email already exists", 400));
     const newUser = await User.create({
       firstName: data.firstName,
       lastName: data.lastName,
