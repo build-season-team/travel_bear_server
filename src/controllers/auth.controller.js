@@ -34,7 +34,7 @@ exports.register = catchAsync ( async (req, res, next) => {
     password: data.password,
   });
 
-  return createSendToken(newUser);
+   createSendToken(newUser);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -52,7 +52,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3 Send token
-  return createSendToken(user);
+   createSendToken(user);
 
   // });
 });
