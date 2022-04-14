@@ -32,10 +32,10 @@ const apartmentSchema = new mongoose.Schema(
       maxlength: [500, "Description must be less than 500 characters"],
       minlength: [4, "Description must be more than 4 characters"],
     },
-    // photo: {
-    //   type: String,
-    //   required: [true, "An apartment must have a photo"],
-    // },
+    image: {
+      type: Array,
+      required: [true, "A user must have an image"],
+    },
     // owner: {
       // type: mongoose.Schema.Types.ObjectId,
       // ref: "User",
