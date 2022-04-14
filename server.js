@@ -1,4 +1,4 @@
-require("express-async-errors");
+
 const app = require("express")();
 const dotenv = require("dotenv");
 const globalErrorHandler = require("./src/middlewares/error.middleware");
