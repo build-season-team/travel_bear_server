@@ -24,8 +24,8 @@ const AppError = require("./../utils/appError");
   }
 
   exports.signUp = async (data, next) => {
-    let user = await User.findOne({ email: data.email });
-    if (user) next(new AppError("Email already exists", 400));
+    let oldUser = await User.findOne({ email: data.email });
+    if (oldUser) next(new AppError("Email already exists", 400));
     const newUser = await User.create({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -37,22 +37,25 @@ const AppError = require("./../utils/appError");
     return createSendToken(newUser);
   }
 
-  exports.signin = async (data, next) => {
-    const { email, password } = data;
+ exports.signin = async (data, next) => {
+   const { email, password } = data;
 
-    // 1 check if email and password exists
-    if (!email || !password) {
-      return next(new AppError("Please provide email and password", 400));
-    }
+   // 1 check if email and password exists
+   if (!email || !password) {
+      next(new AppError("Please provide email and password", 400));
+   }
 
-    //2 check if user exists and password is correct
-    const user = await User.findOne({ email: email }).select("+password");
-    if (!user || !(await user.correctPassword(password, user.password))) {
-      return next(new AppError("Incorrect email or password", 401));
-    }
+   //2 check if user exists and password is correct
+   const user = await User.findOne({ email: email }).select("+password");
+   if (!user || !(await user.correctPassword(password, user.password))) {
+      next(new AppError("Incorrect email or password", 401));
+   }
 
-    // 3 Send token
-    return createSendToken(user);
-  };
+   // 3 Send token
+   return createSendToken(user);
+  
+   // });
+ };
+
 
 
