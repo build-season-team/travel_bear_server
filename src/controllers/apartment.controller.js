@@ -1,8 +1,8 @@
 const Apartment = require("../models/apartment");
+const catchAsync = require("../utils/catchAsync");
 
 // create an apartment
-exports.register = async (req, res) => {
-  try {
+exports.register = catchAsync( async (req, res, next) => {
    const allImages = req.files;
    console.log(allImages.length);
 
@@ -43,12 +43,7 @@ exports.register = async (req, res) => {
       });
     });
    }
-  } catch (err) {
-    res.status(500).send({
-      message: err.message,
-    });    
-  }
-};
+});
 
 
 
