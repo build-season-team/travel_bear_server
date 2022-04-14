@@ -79,6 +79,10 @@ const apartmentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    visited: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: {
