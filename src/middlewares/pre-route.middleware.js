@@ -8,9 +8,9 @@ module.exports = (app) => {
   app.use(helmet());
   app.use(morgan("dev"));
   app.use(express.json());
-  // app.use(express.static("/public"));
+  app.use(express.static("/public"));
   app.use(express.urlencoded({ extended: false }));
-  // app.use("/uploads", express.static("/uploads"));
+  app.use("/uploads", express.static("/uploads"));
 
   return app;
 };

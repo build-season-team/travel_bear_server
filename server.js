@@ -5,7 +5,9 @@ const globalErrorHandler = require("./src/middlewares/error.middleware");
 const AppError = require("./src/utils/appError");
 const router = require("./src/routes/index");
 
-dotenv.config();
+dotenv.config(
+  {path: "./.env"}
+);
 const PORT = process.env.PORT || 3000;
 
 // Pre-route middlewares

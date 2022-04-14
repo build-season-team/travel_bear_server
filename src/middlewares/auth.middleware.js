@@ -1,3 +1,11 @@
+const AppError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
+const jwt = require("jsonwebtoken");
+const {promisify} = require("util");
+const User = require("../models/user.model");
+// const crypto = require("crypto");
+
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check if it exists
   let token = "";
@@ -6,18 +14,17 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
-  }
+  } 
   // console.log(token);
   if (!token) {
     return next(
       new AppError("You are not logged in, please log in to get access", 401)
-    );
-  }
-  // 2)Validate token
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  // console.log(decoded);
+      );
+    }
+    // 2)Validate token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    console.log("=================================");
+    console.log(decoded);
 
   // 3) check if user still exists
   const freshUser = await User.findById(decoded.id);

@@ -48,7 +48,6 @@ const sendErrorProd = (err, req, res) => {
         message: "Something went very wrong",
       });
     }
-  
 };
 
 module.exports = (err, req, res, next) => {
