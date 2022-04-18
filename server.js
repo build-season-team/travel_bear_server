@@ -5,10 +5,10 @@ const globalErrorHandler = require("./src/middlewares/error.middleware");
 const AppError = require("./src/utils/appError");
 const router = require("./src/routes/index");
 
-dotenv.config({
-  path: "./config.env",
-});
-const PORT = process.env.PORT;
+dotenv.config(
+  {path: "./.env"}
+);
+const PORT = process.env.PORT || 3000;
 
 // Pre-route middlewares
 require("./src/middlewares/pre-route.middleware")(app);
@@ -32,7 +32,7 @@ app.listen(PORT, async () => {
   //Initialize MongoDB
   await require("./src/config/db.config")();
   console.log(
-    `:::> Server listening on port ${PORT} @ http://localhost:${PORT}<::`
+    `:::> Server listening on port ${PORT} at http://localhost:${PORT} <::`
   );
 });
 

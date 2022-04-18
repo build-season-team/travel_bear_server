@@ -9,7 +9,6 @@ const mongoOptions = {
 
 module.exports = async () => {
     try{
-
         await mongoose.connect(MONGO_URL,mongoOptions );
         console.log("DB connected successfully");
     } catch(err) {
