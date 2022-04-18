@@ -1,4 +1,4 @@
-const Apartment = require("../models/apartment");
+const Apartment = require("../models/apartment.model");
 const catchAsync = require("../utils/catchAsync");
 
 // create an apartment
