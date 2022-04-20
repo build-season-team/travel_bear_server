@@ -23,6 +23,7 @@ exports.createTrip = async (req, res, next) => {
     price: req.body.apartment.amount,
     status: "pending",
   });
+  
   apartment.trips.push(trip);
   apartment.save();
   user.trips.push(trip);
