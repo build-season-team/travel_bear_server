@@ -55,12 +55,14 @@ exports.view = async (req, res) => {
     const role = await User.findById(req.userId).role;
     const apartment = await Apartment.findById(req.params.id);
 
+    // check if the apartment exists
     if (!apartment) {
       return res.status(404).send({
         message: "No apartment found",
       });
     }
 
+    // check if the user is a guest and show the apartment
     if (!role) {
       if (checks.apartmentsStatus(apartment) === true) {
         return res.status(200).send({
@@ -69,7 +71,18 @@ exports.view = async (req, res) => {
         });
       }
     }
+
+    // check if the user is a landlord or admin, and show all of the apartment
+    if (role === "landlord" || role === "admin") {
+      if (checks.apartmentsStatus(apartment) === true) {
+        return res.status(200).send({
+          message: "Apartment is available to view",
+          data: apartment,
+        });
+      }
+    }
   } catch (error) {
+    // server errors
     res.status(500).send({
       message: error.message,
     });
@@ -79,14 +92,15 @@ exports.view = async (req, res) => {
 // read all apartments
 exports.viewAll = async (req, res) => {
   try {
-    const apartments = await Apartment.find();
+    // get all the data from the request
+    const apartments = await Apartments.find();
     if (!apartments) {
       return res.status(404).send({
         message: "No apartments found",
       });
     }
     res.status(200).send({
-      message: "all apartments have been fetched",
+      message: "All apartments are available",
       data: apartments,
     });
   } catch (err) {
