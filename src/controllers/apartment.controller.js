@@ -15,7 +15,9 @@ exports.register = catchAsync(async (req, res, next) => {
   }
   if (allImages.length === 5) {
     let apartmentImages = [];
-    allImages.map((image) => apartmentImages.push(image.filename));
+    allImages.map((image) => {
+      apartmentImages.push(image.filename);
+    });
 
     const apartment = new Apartment({
       houseTitle: req.body.houseTitle,
@@ -49,37 +51,43 @@ exports.register = catchAsync(async (req, res, next) => {
 
 
 // read an apartment
-exports.view = async (req, res) => {
+exports.view = async (req, res, next) => {
   try {
     // get all the data from the request
-    const role = await User.findById(req.userId).role;
+    const role = req.user.role;
     const apartment = await Apartment.findById(req.params.id);
+
+    console.log(apartment);
 
     // check if the apartment exists
     if (!apartment) {
       return res.status(404).send({
+        success: false,
         message: "No apartment found",
       });
     }
 
     // check if the user is a guest and show the apartment
-    if (!role) {
-      if (checks.apartmentsStatus(apartment) === true) {
+    if (role == "user" || !role) {
+      if (checks.apartmentsStatus(apartment)) {
         return res.status(200).send({
           message: "Apartment is available for user booking",
           data: apartment,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Apartment is not available for user booking",
+          status: "failed"
         });
       }
     }
 
     // check if the user is a landlord or admin, and show all of the apartment
     if (role === "landlord" || role === "admin") {
-      if (checks.apartmentsStatus(apartment) === true) {
-        return res.status(200).send({
-          message: "Apartment is available to view",
-          data: apartment,
-        });
-      }
+      return res.status(200).send({
+        message: "Apartment is available for only Admins and Landlords to view",
+        data: apartment,
+      });
     }
   } catch (error) {
     // server errors
@@ -90,10 +98,10 @@ exports.view = async (req, res) => {
 };
 
 // read all apartments
-exports.viewAll = async (req, res) => {
+exports.viewAll = async (req, res, next) => {
   try {
     // get all the data from the request
-    const apartments = await Apartments.find();
+    const apartments = await Apartment.find();
     if (!apartments) {
       return res.status(404).send({
         message: "No apartments found",
