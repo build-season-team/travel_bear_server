@@ -53,6 +53,5 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 3 Send token
    createSendToken(user, 201, req, res);
-
   // });
 });
