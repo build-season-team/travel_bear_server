@@ -66,11 +66,14 @@ const apartmentSchema = new mongoose.Schema(
       default: false,
     },
     
-    isActive: {
+    isEnabled: {
       type: Boolean,
       default: true,
     },
-
+    isOccupied: {
+      type: Boolean,
+      default: false,
+    },
     isVerified: {
       type: Boolean,
       default: false,

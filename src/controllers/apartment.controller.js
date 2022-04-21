@@ -1,5 +1,7 @@
 const Apartment = require("../models/apartment.model");
+const User = require("../models/user.model");
 const catchAsync = require("../utils/catchAsync");
+const checks = require("../utils/checks");
 
 // create an apartment
 exports.register = catchAsync(async (req, res, next) => {
@@ -49,17 +51,38 @@ exports.register = catchAsync(async (req, res, next) => {
 // read an apartment
 exports.view = async (req, res) => {
   try {
+    // get all the data from the request
+    const role = await User.findById(req.userId).role;
     const apartment = await Apartment.findById(req.params.id);
+
+    // check if the apartment exists
     if (!apartment) {
       return res.status(404).send({
-        message: "Apartment not found",
+        message: "No apartment found",
       });
     }
-    res.status(200).send({
-      message: "an apartment has been fetched",
-      data: apartment,
-    });
+
+    // check if the user is a guest and show the apartment
+    if (!role) {
+      if (checks.apartmentsStatus(apartment) === true) {
+        return res.status(200).send({
+          message: "Apartment is available for user booking",
+          data: apartment,
+        });
+      }
+    }
+
+    // check if the user is a landlord or admin, and show all of the apartment
+    if (role === "landlord" || role === "admin") {
+      if (checks.apartmentsStatus(apartment) === true) {
+        return res.status(200).send({
+          message: "Apartment is available to view",
+          data: apartment,
+        });
+      }
+    }
   } catch (error) {
+    // server errors
     res.status(500).send({
       message: error.message,
     });
@@ -69,14 +92,15 @@ exports.view = async (req, res) => {
 // read all apartments
 exports.viewAll = async (req, res) => {
   try {
-    const apartments = await Apartment.find();
+    // get all the data from the request
+    const apartments = await Apartments.find();
     if (!apartments) {
       return res.status(404).send({
         message: "No apartments found",
       });
     }
     res.status(200).send({
-      message: "all apartments have been fetched",
+      message: "All apartments are available",
       data: apartments,
     });
   } catch (err) {
