@@ -34,4 +34,8 @@ exports.createTrip = async (req, res, next) => {
   });
 };
 
+exports.readTrips = async (req, res, next) => {
+  
+};
+
 
