@@ -1,39 +1,40 @@
 const Reviews = require("../models/review");
 
 exports.createReview = async (req, res, next) => {
-  const payload = req.body;
-  if(!payload.review){
+  const {review,rating,apartment,userId} = req.body;
+
+  if(!review){
     return res.status(400).json({
       success: false,
       message: "Review is required"
     });
   }
-  if(!payload.rating){
+  if(!rating){
     return res.status(400).json({
       success: false,
       message: "Rating is required"
     });
   }
-  if(!payload.apartment){
+  if(!apartment){
     return res.status(400).json({
       success: false,
       message: "Apartment is required"
     });
   }
-  if(!payload.user){
+  if(!userId){
     return res.status(400).json({
       success: false,
       message: "User is required"
     });
   }
-  const review = new Reviews({
+  const singleReview = new Reviews({
     user: req.body.user,
     apartment: req.body.apartment,
     review: req.body.review,
     rating: req.body.rating,
   });
 
-  const savedReview = await review.save();
+  const savedReview = await singleReview.save();
 
   return res.status(201).json({
     success: true,
