@@ -6,46 +6,104 @@ const checks = require("../utils/checks");
 // create an apartment
 exports.register = catchAsync(async (req, res, next) => {
   const allImages = req.files;
+  const {
+    houseTitle,
+    description,
+    houseRules,
+    amount,
+    address,
+    city,
+    roomCondition
+  } = req.body;
+
+
+  if (!houseTitle) {
+    return res.status(400).send({
+      success: false,
+      message: "House title is required"
+    });
+  }
+  if (!description) {
+    return res.status(400).send({
+      success: false,
+      message: "House description is required"
+    });
+  }
+  if (!houseRules) {
+    return res.status(400).send({
+      success: false,
+      message: "Description is required"
+    });
+  }
+  if (!amount) {
+    return res.status(400).send({
+      success: false,
+      message: "amount is required"
+    });
+  }
+  if (!address) {
+    return res.status(400).send({
+      success: false,
+      message: "address of the house is required"
+    });
+  }
+  if (!city) {
+    return res.status(400).send({
+      success: false,
+      message: "city is not provided"
+    });
+  }
+  if (!state) {
+    return res.status(400).send({
+      success: false,
+      message: "state is not provided"
+    });
+  }
+  if (!roomCondition) {
+    return res.status(400).send({
+      success: false,
+      message: "room condition is not specified"
+    });
+  }
 
   //  check if 5 pictures are uploaded
   if (allImages.length !== 5) {
     res.status(400).send({
       message: "please upload 5 pictures of your apartment",
     });
-  }
-  if (allImages.length === 5) {
+  } else {
     let apartmentImages = [];
     allImages.map((image) => {
       apartmentImages.push(image.filename);
     });
-
-    const apartment = new Apartment({
-      houseTitle: req.body.houseTitle,
-      description: req.body.description,
-      houseRules: req.body.houseRules,
-      amount: req.body.amount,
-      address: req.body.address,
-      owner: req.user.id,
-      image: apartmentImages,
-      city: req.body.city,
-      state: req.body.state,
-      roomCondition: req.body.roomCondition,
-    });
-
-    await apartment.save().then((result) => {
-      // console.log(result);
-      res.status(201).send({
-        message: "Apartment has been created",
-        data: result,
-      });
-    }).catch((err) => {
-      // console.log(err);
-      res.status(400).send({
-        message: "Apartment could not be created",
-        error: err,
-      });
-    });
   }
+
+  const apartment = new Apartment({
+    houseTitle: req.body.houseTitle,
+    description: req.body.description,
+    houseRules: req.body.houseRules,
+    amount: req.body.amount,
+    address: req.body.address,
+    owner: req.user.id,
+    image: apartmentImages,
+    city: req.body.city,
+    state: req.body.state,
+    roomCondition: req.body.roomCondition,
+  });
+
+  await apartment.save().then((result) => {
+    // console.log(result);
+    res.status(201).send({
+      message: "Apartment has been created",
+      data: result,
+    });
+  }).catch((err) => {
+    // console.log(err);
+    res.status(400).send({
+      message: "Apartment could not be created",
+      error: err,
+    });
+  });
 });
 
 
