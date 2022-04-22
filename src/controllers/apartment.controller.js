@@ -16,7 +16,6 @@ exports.register = catchAsync(async (req, res, next) => {
     roomCondition
   } = req.body;
 
-
   if (!houseTitle) {
     return res.status(400).send({
       success: false,
@@ -77,7 +76,6 @@ exports.register = catchAsync(async (req, res, next) => {
       apartmentImages.push(image.filename);
     });
   }
-
   const apartment = new Apartment({
     houseTitle: req.body.houseTitle,
     description: req.body.description,
