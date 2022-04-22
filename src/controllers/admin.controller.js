@@ -25,7 +25,7 @@ exports.getAllUsers = async (req, res, next) => {
 };
 
 
-
+// view single users endpoint by id
 exports.getOneUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
