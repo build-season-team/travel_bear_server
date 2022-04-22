@@ -66,11 +66,14 @@ const apartmentSchema = new mongoose.Schema(
       default: false,
     },
     
-    isActive: {
+    isEnabled: {
       type: Boolean,
       default: true,
     },
-
+    isOccupied: {
+      type: Boolean,
+      default: false,
+    },
     isVerified: {
       type: Boolean,
       default: false,
@@ -83,14 +86,12 @@ const apartmentSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    reviews: {
-      type: String,
-      default: "",
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      }
+    ],
     trips: [
       {
         type: mongoose.Schema.Types.ObjectId,
