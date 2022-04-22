@@ -6,80 +6,144 @@ const checks = require("../utils/checks");
 // create an apartment
 exports.register = catchAsync(async (req, res, next) => {
   const allImages = req.files;
+  const {
+    houseTitle,
+    description,
+    houseRules,
+    amount,
+    address,
+    city,
+    roomCondition
+  } = req.body;
+
+  if (!houseTitle) {
+    return res.status(400).send({
+      success: false,
+      message: "House title is required"
+    });
+  }
+  if (!description) {
+    return res.status(400).send({
+      success: false,
+      message: "House description is required"
+    });
+  }
+  if (!houseRules) {
+    return res.status(400).send({
+      success: false,
+      message: "Description is required"
+    });
+  }
+  if (!amount) {
+    return res.status(400).send({
+      success: false,
+      message: "amount is required"
+    });
+  }
+  if (!address) {
+    return res.status(400).send({
+      success: false,
+      message: "address of the house is required"
+    });
+  }
+  if (!city) {
+    return res.status(400).send({
+      success: false,
+      message: "city is not provided"
+    });
+  }
+  if (!state) {
+    return res.status(400).send({
+      success: false,
+      message: "state is not provided"
+    });
+  }
+  if (!roomCondition) {
+    return res.status(400).send({
+      success: false,
+      message: "room condition is not specified"
+    });
+  }
 
   //  check if 5 pictures are uploaded
   if (allImages.length !== 5) {
     res.status(400).send({
       message: "please upload 5 pictures of your apartment",
     });
-  }
-  if (allImages.length === 5) {
+  } else {
     let apartmentImages = [];
-    allImages.map((image) => apartmentImages.push(image.filename));
-
-    const apartment = new Apartment({
-      houseTitle: req.body.houseTitle,
-      description: req.body.description,
-      houseRules: req.body.houseRules,
-      amount: req.body.amount,
-      address: req.body.address,
-      owner: req.user.id,
-      image: apartmentImages,
-      city: req.body.city,
-      state: req.body.state,
-      roomCondition: req.body.roomCondition,
-    });
-
-    await apartment.save().then((result) => {
-      // console.log(result);
-      res.status(201).send({
-        message: "Apartment has been created",
-        data: result,
-      });
-    }).catch((err) => {
-      // console.log(err);
-      res.status(400).send({
-        message: "Apartment could not be created",
-        error: err,
-      });
+    allImages.map((image) => {
+      apartmentImages.push(image.filename);
     });
   }
+  const apartment = new Apartment({
+    houseTitle: req.body.houseTitle,
+    description: req.body.description,
+    houseRules: req.body.houseRules,
+    amount: req.body.amount,
+    address: req.body.address,
+    owner: req.user.id,
+    image: apartmentImages,
+    city: req.body.city,
+    state: req.body.state,
+    roomCondition: req.body.roomCondition,
+  });
+
+  await apartment.save().then((result) => {
+    // console.log(result);
+    res.status(201).send({
+      message: "Apartment has been created",
+      data: result,
+    });
+  }).catch((err) => {
+    // console.log(err);
+    res.status(400).send({
+      message: "Apartment could not be created",
+      error: err,
+    });
+  });
 });
 
 
 
 // read an apartment
-exports.view = async (req, res) => {
+exports.view = async (req, res, next) => {
   try {
     // get all the data from the request
-    const role = await User.findById(req.userId).role;
+    const role = req.user.role;
     const apartment = await Apartment.findById(req.params.id);
+
+    console.log(apartment);
 
     // check if the apartment exists
     if (!apartment) {
       return res.status(404).send({
+        success: false,
         message: "No apartment found",
       });
     }
 
     // check if the user is a guest and show the apartment
-    if (!role) {
-      if (checks.apartmentsStatus(apartment) === true) {
+    if (role == "user" || !role) {
+      if (checks.apartmentsStatus(apartment)) {
         return res.status(200).send({
           message: "Apartment is available for user booking",
           data: apartment,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Apartment is not available for user booking",
+          status: "failed"
         });
       }
     }
 
     // check if the user is a landlord or admin, and show all of the apartment
     if (role === "landlord" || role === "admin") {
-      if (checks.apartmentsStatus(apartment) === true) {
-        return res.status(200).send({
-          message: "Apartment is available to view",
-          data: apartment,
-        });
-      }
+      return res.status(200).send({
+        message: "Apartment is available for only Admins and Landlords to view",
+        data: apartment,
+      });
     }
   } catch (error) {
     // server errors
@@ -90,10 +154,10 @@ exports.view = async (req, res) => {
 };
 
 // read all apartments
-exports.viewAll = async (req, res) => {
+exports.viewAll = async (req, res, next) => {
   try {
     // get all the data from the request
-    const apartments = await Apartments.find();
+    const apartments = await Apartment.find();
     if (!apartments) {
       return res.status(404).send({
         message: "No apartments found",
