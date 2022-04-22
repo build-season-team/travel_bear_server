@@ -60,11 +60,6 @@ const apartmentSchema = new mongoose.Schema(
       enum: ["good", "excellent", "others"],
       default: "good"
     },
-
-    booked: {
-      type: Boolean,
-      default: false,
-    },
     
     isEnabled: {
       type: Boolean,
@@ -98,7 +93,6 @@ const apartmentSchema = new mongoose.Schema(
         ref: "Trips",
       },
     ],
-
   },
 
   {
