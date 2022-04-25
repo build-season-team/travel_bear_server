@@ -47,6 +47,7 @@ const apartmentSchema = new mongoose.Schema(
       maxlength: [500, "Description must be less than 500 characters"],
       minlength: [4, "Description must be more than 4 characters"],
     },
+    
     state: {
       type: String,
       required: [true, "A apartment must have a state"],

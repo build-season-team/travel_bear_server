@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getAllUsers, getOneUser, enableUser, disableUser, verifyUser, getAllApartments, getOneApartment, enableApartment, disableApartment, deleteApartment, verifyApartment, verifyPayment, recoverApartment} = require("../controllers/admin.controller");
+const { getAllUsers, getOneUser, enableUser, disableUser, verifyUser, getAllApartments, getOneApartment, enableApartment, disableApartment, deleteApartment, getAllApartmentsToBeVerified, verifyApartment, verifyPayment, recoverApartment } = require("../controllers/admin.controller");
 
 // USER
 // get all users
@@ -30,6 +30,7 @@ router.delete("/apartments/delete/:id", deleteApartment);
 router.put("/apartments/recover/:id", recoverApartment);
 
 // verification
+router.get("/apartments/pending/verification", getAllApartmentsToBeVerified);
 router.put("/apartments/verify/:id", verifyApartment);
 
 // PAYMENT 

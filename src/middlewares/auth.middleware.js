@@ -1,57 +1,58 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
-const {promisify} = require("util");
+const {
+  promisify
+} = require("util");
 const User = require("../models/user.model");
 // const crypto = require("crypto");
 
 
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check if it exists
-  let token = "";
+  let token;
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-  } 
+  }
   // console.log(token);
   if (!token) {
     // return next(
     //   new AppError("You are not logged in, please log in to get access", 401)
     //   );
-    res.status(401).json({
+    return res.status(401).json({
       success: false,
       message: "You are not logged in, please log in to get access",
     });
-    }
-    // 2)Validate token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    if(decoded) {
-      console.log("user is active");
-    }
+  }
+  // 2)Validate token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  if (decoded) {
+    console.log("user is active");
+  }
 
   // 3) check if user still exists
   const freshUser = await User.findById(decoded.id);
   // console.log(freshUser);
   if (!freshUser) {
     // return next(new AppError("The user does no longer exists", 401));
-    res.status(401).json({
+  return res.status(401).json({
       success: false,
       message: "The user no longer exists",
     });
-
   }
 
   // 4) check if user change password after token issue
   if (freshUser.changedPasswordAfter(decoded.iat)) {
-    return next(
+    // return next(
       // new AppError("User recently changed password please log in again", 401)
-      res.status(401).json({
+     return res.status(401).json({
         success: false,
         message: "User recently changed password please log in again",
-      })
-    );
+      });
+    // );
   }
 
   // Grant Access to protected route

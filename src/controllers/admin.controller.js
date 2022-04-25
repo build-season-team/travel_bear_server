@@ -178,6 +178,7 @@ exports.getOneApartment = async (req, res, next) => {
         message: "No apartment found",
       });
     } else {
+
       res.status(200).json({
         status: "success",
         data: {
@@ -310,6 +311,31 @@ exports.recoverApartment = async (req, res, next) => {
       res.status(200).json({
         status: "success",
         message: "Apartment successfully recovered",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: error.message
+    });
+  }
+};
+
+// apartments to be verified
+exports.getAllApartmentsToBeVerified = async (req, res) => {
+  try {
+    const apartments = await Apartment.find({ isVerified: false });
+    if (!apartments) {
+      return res.status(404).json({
+        status: "failed",
+        message: "No apartments found",
+      });
+    } else {
+      res.status(200).json({
+        status: "success",
+        data: {
+          apartments,
+        },
       });
     }
   } catch (error) {
