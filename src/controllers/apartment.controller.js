@@ -14,8 +14,8 @@ exports.register = catchAsync(async (req, res, next) => {
       amount,
       address,
       city,
-      state,
-      roomCondition
+      roomCondition,
+      state,z
     } = req.body;
 
     if (!houseTitle) {

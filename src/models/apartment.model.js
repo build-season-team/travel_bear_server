@@ -28,7 +28,7 @@ const apartmentSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: [true, "A user must have a location"],
+      required: [true, "A user must have a location"], 
       maxlength: [500, "Description must be less than 500 characters"],
       minlength: [4, "Description must be more than 4 characters"],
     },
