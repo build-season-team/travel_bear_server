@@ -17,25 +17,40 @@ exports.protect = catchAsync(async (req, res, next) => {
   } 
   // console.log(token);
   if (!token) {
-    return next(
-      new AppError("You are not logged in, please log in to get access", 401)
-      );
+    // return next(
+    //   new AppError("You are not logged in, please log in to get access", 401)
+    //   );
+    res.status(401).json({
+      success: false,
+      message: "You are not logged in, please log in to get access",
+    });
     }
     // 2)Validate token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log("=================================");
-    console.log(decoded);
+    if(decoded) {
+      console.log("user is active");
+    }
 
   // 3) check if user still exists
   const freshUser = await User.findById(decoded.id);
+  // console.log(freshUser);
   if (!freshUser) {
-    return next(new AppError("The user does no longer exists", 401));
+    // return next(new AppError("The user does no longer exists", 401));
+    res.status(401).json({
+      success: false,
+      message: "The user no longer exists",
+    });
+
   }
 
   // 4) check if user change password after token issue
   if (freshUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError("User recently changed password please log in again", 401)
+      // new AppError("User recently changed password please log in again", 401)
+      res.status(401).json({
+        success: false,
+        message: "User recently changed password please log in again",
+      })
     );
   }
 

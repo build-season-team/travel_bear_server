@@ -43,6 +43,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "default.jpg",
     },
+    isEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     role: {
       type: String,
       enum: ["user", "landlord", "admin"],

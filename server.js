@@ -21,7 +21,11 @@ app.get("/ping", (req, res) => res.status(200).send("Hello world!"));
 
 // Not Found route
 app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  // next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  res.status(404).json({
+    status: "failed",
+    message: "Can't find " + req.originalUrl + " on this server",
+  });
 });
 
 // Error middlewares
