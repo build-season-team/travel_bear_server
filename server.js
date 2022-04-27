@@ -6,7 +6,7 @@ const AppError = require("./src/utils/appError");
 const router = require("./src/routes/index");
 
 dotenv.config(
-  {path: "./.env"}
+  {path: "./config.env"}
 );
 const PORT = process.env.PORT || 3000;
 
