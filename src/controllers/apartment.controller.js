@@ -15,7 +15,7 @@ exports.register = catchAsync(async (req, res, next) => {
       address,
       city,
       roomCondition,
-      state,z
+      state,
     } = req.body;
 
     if (!houseTitle) {
@@ -66,13 +66,14 @@ exports.register = catchAsync(async (req, res, next) => {
         message: "room condition is not specified"
       });
     }
+    
     //  check if 5 pictures are uploaded
+    let apartmentImages = [];
     if (allImages.length !== 5) {
       res.status(400).send({
         message: "please upload 5 pictures of your apartment",
       });
     } else {
-      let apartmentImages = [];
       allImages.map((image) => {
         apartmentImages.push(image.filename);
       });

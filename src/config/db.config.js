@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const MONGO_URL = process.env.MONGO_URL_DEV;
+const MONGO_URL = process.env.MONGO_URL;
 const mongoOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
