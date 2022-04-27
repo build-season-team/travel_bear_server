@@ -13,9 +13,10 @@ exports.register = catchAsync(async (req, res, next) => {
     amount,
     address,
     city,
-    roomCondition
+    roomCondition,
+    state
   } = req.body;
-
+  let apartmentImages = [];
   if (!houseTitle) {
     return res.status(400).send({
       success: false,
@@ -71,7 +72,7 @@ exports.register = catchAsync(async (req, res, next) => {
       message: "please upload 5 pictures of your apartment",
     });
   } else {
-    let apartmentImages = [];
+    
     allImages.map((image) => {
       apartmentImages.push(image.filename);
     });
