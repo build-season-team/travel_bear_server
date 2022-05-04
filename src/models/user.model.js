@@ -69,6 +69,18 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.virtual("banks", {
+  ref: "Bank",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.virtual("apartments", {
+  ref: "Apartment",
+  foreignField: "user",
+  localField: "_id",
+});
+
 userSchema.pre("save", function (next) {
   if (!this.isModified("password") || this.isNew) {
     return next();

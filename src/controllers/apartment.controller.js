@@ -111,7 +111,7 @@ exports.register = catchAsync(async (req, res, next) => {
 exports.view = async (req, res, next) => {
   try {
     // get all the data from the request
-    const role = req.user.role;
+    const role = req.user?.role || 'user';
     const apartment = await Apartment.findById(req.params.id);
 
     console.log(apartment);
@@ -126,17 +126,11 @@ exports.view = async (req, res, next) => {
 
     // check if the user is a guest and show the apartment
     if (role == "user" || !role) {
-      if (checks.apartmentsStatus(apartment)) {
-        return res.status(200).send({
-          message: "Apartment is available for user booking",
-          data: apartment,
-        });
-      } else {
-        return res.status(200).send({
-          message: "Apartment is not available for user booking",
-          status: "failed"
-        });
-      }
+      return res.status(200).send({
+        message: "Apartment is available for user booking",
+        data: apartment,
+      });
+      
     }
 
     // check if the user is a landlord or admin, and show all of the apartment

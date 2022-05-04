@@ -24,11 +24,11 @@ const apartmentSchema = new mongoose.Schema(
       type: Number,
       required: [true, "A user must have a price"],
       maxlength: [500, "Description must be less than 500 characters"],
-      minlength: [4, "Description must be more than 4 characters"]
+      minlength: [4, "Description must be more than 4 characters"],
     },
     address: {
       type: String,
-      required: [true, "A user must have a location"], 
+      required: [true, "A user must have a location"],
       maxlength: [500, "Description must be less than 500 characters"],
       minlength: [4, "Description must be more than 4 characters"],
     },
@@ -58,9 +58,9 @@ const apartmentSchema = new mongoose.Schema(
       type: String,
       required: [true, "An apartment must have a room condition"],
       enum: ["good", "excellent", "others"],
-      default: "good"
+      default: "good",
     },
-    
+
     isEnabled: {
       type: Boolean,
       default: true,
@@ -85,7 +85,7 @@ const apartmentSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review",
-      }
+      },
     ],
     trips: [
       {
@@ -93,6 +93,11 @@ const apartmentSchema = new mongoose.Schema(
         ref: "Trips",
       },
     ],
+    ratingsAverage: {
+      type: Number,
+      default: 4.1,
+      set: (val) => Math.round(val * 10) / 10,
+    },
   },
 
   {
