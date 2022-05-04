@@ -1,4 +1,4 @@
-const Trips = require("../models/trips");
+const Trips = require("../models/trip.model");
 const Apartment = require("../models/apartment");
 const User = require("../models/user");
 
