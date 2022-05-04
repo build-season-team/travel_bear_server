@@ -76,7 +76,7 @@ exports.verify = catchAsync( async (req, res, next) => {
               amount: response.data.amount,
               reference: req.query.tx_ref
             });
-            res.redirect('http://localhost:3000/reservation')
+            res.redirect('http://localhost:3000/reservation?success=true')
         } else {
             // Inform the customer their payment was unsuccessful
             

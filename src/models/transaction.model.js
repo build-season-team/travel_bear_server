@@ -34,9 +34,9 @@ const transactionSchema = new Schema(
   }
 );
 
-transactionSchema.pre(/^find/, function (next) {
-  this.populate("user");
-  next();
-});
+// transactionSchema.pre(/^find/, function (next) {
+//   this.populate("user");
+//   next();
+// });
 
 module.exports = mongoose.model("Transaction", transactionSchema);

@@ -29,9 +29,9 @@ const bookingSchema = new Schema(
   }
 );
 
-bookingSchema.pre(/^find/, function (next) {
-  this.populate("user").populate("apartment");
-  next();
-});
+// bookingSchema.pre(/^find/, function (next) {
+//   this.populate("user").populate("apartment");
+//   next();
+// });
 
 module.exports = mongoose.model("Booking", bookingSchema);

@@ -62,6 +62,10 @@ const userSchema = new mongoose.Schema(
       minlength: 8,
       select: false,
     },
+    balance: {
+      type: Number,
+      default: 0.00
+    }
   },
   {
     toJSON: { virtuals: true },
@@ -79,6 +83,27 @@ userSchema.virtual("apartments", {
   ref: "Apartment",
   foreignField: "user",
   localField: "_id",
+});
+
+userSchema.virtual("booking", {
+  ref: "Booking",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.virtual("transactions", {
+  ref: "Transaction",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.pre(/^find/, function (next) {
+  console.log("in find");
+  this.populate({path: 'banks'})
+    .populate({path: "apartments"})
+    .populate({path: "transactions"});
+  console.log("after populate find");
+  return next();
 });
 
 userSchema.pre("save", function (next) {
