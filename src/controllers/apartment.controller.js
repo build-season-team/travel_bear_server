@@ -184,3 +184,51 @@ exports.remove = async (req, res, next) => {
     message: "an apartment has been deleted",
   });
 };
+
+// enable an apartment
+exports.enable = async (req, res) => {
+  try{
+    const apartment = await Apartment.findById(req.params.id);
+    if (!apartment) {
+      return res.status(404).send({
+        status: "error",
+        message: "No apartment found",
+      });
+    }
+    apartment.isEnabled = true;
+    apartment.save();
+    res.status(200).send({
+      status: "success",
+      message: "apartment has been enabled",
+    });
+  }catch(error){
+    res.status(500).send({
+      status: "error",
+      message: error.message
+    });
+  }
+};
+
+// disable an apartment
+exports.disable = async (req, res) => {
+  try{
+    const apartment = await Apartment.findById(req.params.id);
+    if (!apartment) {
+      return res.status(404).send({
+        success: "error",
+        message: "No apartment found",
+      });
+    }
+    apartment.isEnabled = false;
+    apartment.save();
+    res.status(200).send({
+      status: "success",
+      message: "apartment has been disabled",
+    });
+  }catch(error){
+    res.status(500).send({
+      status: "error",
+      message: error.message
+    });
+  }
+};
