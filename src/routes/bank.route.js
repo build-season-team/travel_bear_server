@@ -1,12 +1,15 @@
 const router = require("express").Router();
-const upload = require("../middlewares/multer.middleware");
 const { protect } = require("../middlewares/auth.middleware");
 const {
   addBank,
   deleteBank,
+  getBank,
 } = require("./../controllers/bank.controller");
 
-router.post("/register", protect, addBank);
-router.put("/delete", protect, deleteBank);
+router.use(protect);
+
+router.get("/getbanks", getBank)
+router.post("/addbank", addBank);
+router.put("/delete", deleteBank);
 
 module.exports = router;
