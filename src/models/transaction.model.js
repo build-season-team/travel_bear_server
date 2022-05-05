@@ -9,10 +9,9 @@ const transactionSchema = new Schema(
       ref: "User",
       required: true,
     },
-    
     amount: {
       type: Number,
-      required: true,
+      required: [true, 'please input amount'],
     },
     ref: {
       type: String,
@@ -25,7 +24,14 @@ const transactionSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["successful", "failed", "pending"]
+      enum: ["successful", "failed", "pending"],
+      default: "pending"
+    },
+    bankName: {
+      type: String,
+    },
+    accountNumber: {
+      type: String
     }
   },
 

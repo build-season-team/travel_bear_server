@@ -58,7 +58,19 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
   }
 
+  console.log(user)
+
   // 3 Send token
    createSendToken(user, 201, req, res);
   // });
 });
+
+exports.getme = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+
+  res.status(200).json({
+    status: "success",
+      message: "Withdrawal Request successfully, please await verification",
+      data: user,
+  })
+})

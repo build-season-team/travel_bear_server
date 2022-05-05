@@ -87,7 +87,7 @@ userSchema.virtual("apartments", {
 
 userSchema.virtual("booking", {
   ref: "Booking",
-  foreignField: "user",
+  foreignField: "owner",
   localField: "_id",
 });
 
@@ -98,11 +98,9 @@ userSchema.virtual("transactions", {
 });
 
 userSchema.pre(/^find/, function (next) {
-  console.log("in find");
   this.populate({path: 'banks'})
     .populate({path: "apartments"})
     .populate({path: "transactions"});
-  console.log("after populate find");
   return next();
 });
 

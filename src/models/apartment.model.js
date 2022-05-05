@@ -36,7 +36,7 @@ const apartmentSchema = new mongoose.Schema(
       type: Array,
       required: [true, "A user must have an image"],
     },
-    owner: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
