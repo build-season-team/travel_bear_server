@@ -23,32 +23,29 @@ const handleJWTExpiredError = (err) =>
   new AppError("Your token has expired please login again", 401);
 
 const sendErrorDev = (err, req, res) => {
-  
-     res.status(err.statusCode).json({
-      status: err.status,
-      error: err,
-      message: err.message,
-      stack: err.stack,
-      // errName: err.name
-    });
-  
+  res.status(err.statusCode).json({
+    status: err.status,
+    error: err,
+    message: err.message,
+    stack: err.stack,
+    // errName: err.name
+  });
 };
 
 const sendErrorProd = (err, req, res) => {
-  
-    if (err.isOperational) {
-       res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message,
-      });
-    } else {
-      console.error("Error ", err);
-       res.status(500).json({
-        status: "error",
-        message: "Something went very wrong",
-      });
-    }
-  
+
+  if (err.isOperational) {
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
+    });
+  } else {
+    console.error("Error ", err);
+    res.status(500).json({
+      status: "error",
+      message: "Something went very wrong",
+    });
+  }
 };
 
 module.exports = (err, req, res, next) => {
@@ -57,7 +54,9 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
-    let error = { ...err };
+    let error = {
+      ...err
+    };
     error.message = err.message;
     console.log(error);
     if (error.kind === "ObjectId") error = handleCastErrorDB(error);
