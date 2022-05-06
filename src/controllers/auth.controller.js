@@ -25,13 +25,20 @@ const createSendToken = (user, statusCode, req, res) => {
 exports.register = catchAsync ( async (req, res, next) => {
   const data = req.body;
   let oldUser = await User.findOne({ email: data.email });
-  if (oldUser) return next(new AppError("Email already exists", 400));
+
+  // if (oldUser) return next(new AppError("Email already exists", 400));
+  if(oldUser) res.status(400).json({
+    status: "failed",
+    message: "Email already exists",
+  });
+
   const newUser = await User.create({
     firstName: data.firstName,
     lastName: data.lastName,
     email: data.email,
     phone: data.phone,
     password: data.password,
+    role: data.role,
   });
 
    createSendToken(newUser, 201, req, res);
@@ -51,8 +58,19 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
   }
 
+  console.log(user)
+
   // 3 Send token
    createSendToken(user, 201, req, res);
-
   // });
 });
+
+exports.getme = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+
+  res.status(200).json({
+    status: "success",
+      message: "Withdrawal Request successfully, please await verification",
+      data: user,
+  })
+})
