@@ -83,7 +83,7 @@ exports.register = catchAsync(async (req, res, next) => {
     houseRules: req.body.houseRules,
     amount: req.body.amount,
     address: req.body.address,
-    owner: req.user.id,
+    user: req.user.id,
     image: apartmentImages,
     city: req.body.city,
     state: req.body.state,
@@ -112,7 +112,7 @@ exports.view = async (req, res, next) => {
   try {
     // get all the data from the request
     const role = req.user?.role || 'user';
-    const apartment = await Apartment.findById(req.params.id);
+    const apartment = await Apartment.findById(req.params.id).populate("user");
 
     console.log(apartment);
 
@@ -152,7 +152,7 @@ exports.view = async (req, res, next) => {
 exports.viewAll = async (req, res, next) => {
   try {
     // get all the data from the request
-    const apartments = await Apartment.find();
+    const apartments = await Apartment.find().populate("user");
     if (!apartments) {
       return res.status(404).send({
         message: "No apartments found",

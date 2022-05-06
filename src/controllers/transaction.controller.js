@@ -20,3 +20,17 @@ exports.createTranscaction = catchAsync(async (req, res, next) => {
       data: transaction,
     });
 })
+
+
+exports.getTransactions = catchAsync(async (req, res, next) => {
+  const transactions = await Transaction.find({$or: [{user: req.user._id}, {receiver: req.user._id}]});
+  console.log(transactions)
+  
+ 
+
+  res.status(201).json({
+    status: "success",
+    messega: "transaction fetched successful",
+    data: transactions,
+  });
+})
