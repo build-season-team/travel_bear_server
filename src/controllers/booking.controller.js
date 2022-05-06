@@ -27,7 +27,7 @@ exports.getPaymentLink = async (req, res, next) => {
             tx_ref: ref,
             amount: amount,
             currency: "NGN",
-            redirect_url: "http://localhost:8001/api/booking/verify",
+            redirect_url: "https://travelbearz.herokuapp.com/api/booking/verify",
             meta: {
               userID: user_id,
               apartmentID: apartment_id,
