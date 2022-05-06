@@ -11,6 +11,5 @@ module.exports = (app) => {
   app.use(express.static("/public"));
   app.use(express.urlencoded({ extended: false }));
   app.use("/uploads", express.static("/uploads"));
-
   return app;
 };
