@@ -145,7 +145,7 @@ exports.verifyUser = async (req, res, next) => {
 
 exports.getAllApartments = async (req, res, next) => {
   try {
-    const apartments = await Apartment.find();
+    const apartments = await Apartment.find().populate("user");
     if (!apartments) {
       return res.status(404).json({
         status: "failed",
