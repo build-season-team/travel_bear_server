@@ -41,5 +41,8 @@
   "devDependencies": {
     "jest": "^26.4.2",
     "nodemon": "^1.19.4"
+  },
+  "engines": {
+    "node": "^12"
   }
 }
